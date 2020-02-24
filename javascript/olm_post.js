@@ -517,6 +517,26 @@ Utility.prototype['sha256'] = restore_stack(function(input) {
     return UTF8ToString(output_buffer, output_length);
 });
 
+Utility.prototype['sha256_bytes'] = restore_stack(function(input_array) {
+    var output_length = utility_method(Module['_olm_sha256_length'])(this.ptr);
+    var input_buffer = stack(input_array);
+    var output_buffer = stack(output_length + NULL_BYTE_PADDING_LENGTH);
+    try {
+        utility_method(Module['_olm_sha256'])(
+            this.ptr,
+            input_buffer, input_array.length,
+            output_buffer, output_length
+        );
+    } finally {
+        // clear out copies of the input buffer, which may be plaintext
+        bzero(input_buffer, input_array.length);
+        for (var i = 0; i < input_array.length; i++) {
+            input_array[i] = 0;
+        }
+    }
+    return UTF8ToString(output_buffer, output_length);
+});
+
 Utility.prototype['ed25519_verify'] = restore_stack(function(
     key, message, signature
 ) {
