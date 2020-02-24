@@ -575,6 +575,8 @@ Utility.prototype['sha256'] = restore_stack(function(input) {
     return UTF8ToString(output_buffer, output_length);
 });
 
+Utility.prototype['sha256_bytes'] = Utility.prototype['sha256'];
+
 Utility.prototype['ed25519_verify'] = restore_stack(function(
     key, message, signature
 ) {
