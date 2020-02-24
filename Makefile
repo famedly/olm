@@ -101,9 +101,9 @@ EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 
 # (This can't be changed by the app with wasm since it's baked into the wasm).
 # (emscripten also mandates at least 16MB of memory for asm.js now, so
 # we don't use this for the legacy build.)
-EMCCFLAGS_WASM += -s TOTAL_STACK=65536 -s TOTAL_MEMORY=262144
+EMCCFLAGS_WASM += -s TOTAL_STACK=65536 -s TOTAL_MEMORY=262144 -s ALLOW_MEMORY_GROWTH=1
 
-EMCCFLAGS_ASMJS += -s WASM=0
+EMCCFLAGS_ASMJS += -s WASM=0 -s ALLOW_MEMORY_GROWTH=1
 
 EMCC.c = $(EMCC) $(CFLAGS) $(CPPFLAGS) -c
 EMCC.cc = $(EMCC) $(CXXFLAGS) $(CPPFLAGS) -c
