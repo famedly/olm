@@ -21,3 +21,25 @@ build_js:
       - javascript/olm.js
       - javascript/olm.wasm
       - javascript/olm_legacy.js
+
+build_win32:
+  image: ubuntu:bionic
+  stage: build
+  script:
+    - apt update
+    - apt install -y curl gnupg2 software-properties-common
+    - curl https://pkg.mxe.cc/repos/apt/client-conf/mxeapt.gpg | apt-key add -
+    - add-apt-repository 'deb https://pkg.mxe.cc/repos/apt bionic main'
+    - apt update
+    - apt install -y mxe-i686-w64-mingw32.static-gcc mxe-i686-w64-mingw32.static-cmake
+    - ln -sf /usr/lib/mxe/usr/bin/i686-w64-mingw32.static-gcc /usr/lib/mxe/usr/bin/i686-w64-mingw32.static-g++ /usr/lib/mxe/usr/x86_64-pc-linux-gnu/bin # https://github.com/mxe/mxe/issues/2449
+    - export PATH=$PATH:/usr/lib/mxe/usr/bin
+    - sed -i 's/\(library(olm\)\b/\1 SHARED/' CMakeLists.txt
+    - useradd -m build
+    - chown -R 'build:' '.'
+    - su -c 'export PATH=$PATH:/usr/lib/mxe/usr/bin && i686-w64-mingw32.static-cmake .' build
+    - su -c 'export PATH=$PATH:/usr/lib/mxe/usr/bin && i686-w64-mingw32.static-cmake --build .' build
+    - su -c 'export PATH=$PATH:/usr/lib/mxe/usr/bin && i686-w64-mingw32.static-strip libolm.dll' build
+  artifacts:
+    paths:
+      - libolm.dll
