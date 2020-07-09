@@ -29,34 +29,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-android {
-    compileSdkVersion 28
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-    defaultConfig {
-        minSdkVersion 16
-
-        externalNativeBuild {
-            cmake {
-                arguments "-DOLM_TESTS=NO"
-            }
-        }
-    }
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "olm/CMakeLists.txt"
-        }
-    }
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 task downloadOlm(type: Download) {
@@ -78,4 +53,31 @@ task installOlm(dependsOn: downloadOlm, type: Copy) {
     into 'olm/'
 }
 
-preBuild.dependsOn installOlm
+android {
+    compileSdkVersion 28
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    defaultConfig {
+        minSdkVersion 16
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DOLM_TESTS=NO"
+            }
+        }
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    preBuild.dependsOn(installOlm)
+
+    externalNativeBuild {
+        cmake {
+            path "olm/CMakeLists.txt"
+        }
+    }
+}
+
