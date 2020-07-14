@@ -1,8 +1,7 @@
 name: flutter_olm
-description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+description: builds the olm library for android and ios
+version: 1.0.0
+repository: https://gitlab.com/famedly/libraries/olm
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
