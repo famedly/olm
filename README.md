@@ -217,7 +217,7 @@ to compile the library for different architectures.
 
 ## Contributing
 
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) when making contributions to the library.
+Please see [CONTRIBUTING.md](https://gitlab.com/famedly/libraries/olm/-/blob/master/CONTRIBUTING.md) when making contributions to the library.
 
 ## Security assessment
 
