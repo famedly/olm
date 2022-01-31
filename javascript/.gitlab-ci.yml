@@ -12,12 +12,9 @@ build:js:
     - make js
   artifacts:
     paths:
-      - build/javascript
       - javascript/olm.js
       - javascript/olm.wasm
       - javascript/olm_legacy.js
-      - javascript/index.d.ts
-      - javascript/exported_functions.json
 
 test:js:
   stage: test
