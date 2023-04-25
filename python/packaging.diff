@@ -1,0 +1,41 @@
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -1,3 +1,8 @@
+ include include/olm/*.h
+-include Makefile
+ include olm_build.py
++include libolm/*
++include libolm/cmake/*
++include libolm/include/olm/*
++recursive-include libolm/lib *
++include libolm/src/*
++recursive-include libolm/tests *
+--- a/olm_build.py
++++ b/olm_build.py
+@@ -25,14 +25,23 @@
+ 
+ DEVELOP = os.environ.get("DEVELOP")
+ 
+-compile_args = ["-I../include"]
+-link_args = ["-L../build"]
++compile_args = ["-Ilibolm/include"]
++link_args = ["-Llibolm/build"]
+ 
+ if DEVELOP and DEVELOP.lower() in ["yes", "true", "1"]:
+     link_args.append('-Wl,-rpath=../build')
+ 
+-headers_build = subprocess.Popen("make headers", shell=True)
+-headers_build.wait()
++try:
++    subprocess.run(
++        ["cmake", ".", "-Bbuild", "-DBUILD_SHARED_LIBS=NO"],
++        cwd="libolm", check=True,
++    )
++    subprocess.run(
++        ["cmake", "--build", "build"],
++        cwd="libolm", check=True,
++    )
++except FileNotFoundError:
++    subprocess.run(["make", "static"], cwd="libolm", check=True)
+ 
+ ffibuilder.set_source(
