@@ -4,6 +4,9 @@ set -e
 DIR=$(mktemp -d)
 SRC=$(pwd)
 
+echo "Making headers"
+make headers
+
 cd $DIR
 
 echo "Copying python module"
