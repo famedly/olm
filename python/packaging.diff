@@ -12,7 +12,7 @@
 +recursive-include libolm/tests *
 --- a/olm_build.py
 +++ b/olm_build.py
-@@ -25,14 +25,23 @@
+@@ -25,13 +25,30 @@
  
  DEVELOP = os.environ.get("DEVELOP")
  
@@ -26,6 +26,7 @@
  
 -headers_build = subprocess.Popen("make headers", shell=True)
 -headers_build.wait()
++# Try to build with cmake first, fall back to GNU make
 +try:
 +    subprocess.run(
 +        ["cmake", ".", "-Bbuild", "-DBUILD_SHARED_LIBS=NO"],
@@ -36,6 +37,13 @@
 +        cwd="libolm", check=True,
 +    )
 +except FileNotFoundError:
-+    subprocess.run(["make", "static"], cwd="libolm", check=True)
++    try:
++        # try "gmake" first because some systems have a non-GNU make
++        # installed as "make"
++        subprocess.run(["gmake", "static"], cwd="libolm", check=True)
++    except FileNotFoundError:
++        # some systems have GNU make installed without the leading "g"
++        # so give that a try (though this may fail if it isn't GNU make)
++        subprocess.run(["make", "static"], cwd="libolm", check=True)
  
  ffibuilder.set_source(

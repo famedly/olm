@@ -203,8 +203,9 @@ endorsed by the Matrix.org Foundation C.I.C.
 ## Release process
 
 First: bump version numbers in ``common.mk``, ``CMakeLists.txt``,
-``javascript/package.json``, ``python/olm/__version__.py``, ``OLMKit.podspec``,
-``Package.swift``, and ``android/gradle.properties``.
+``javascript/package.json``, ``python/olm/__version__.py``,
+``python/pyproject.toml``, ``OLMKit.podspec``, ``Package.swift``, and
+``android/gradle.properties``.
 
 Also, ensure the changelog is up to date, and that everything is committed to
 git.
