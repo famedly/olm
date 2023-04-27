@@ -30,7 +30,7 @@ JS_ASMJS_TARGET := javascript/olm_legacy.js
 WASM_TARGET := $(BUILD_DIR)/wasm/libolm.a
 
 JS_EXPORTED_FUNCTIONS := javascript/exported_functions.json
-JS_EXPORTED_RUNTIME_METHODS := [ALLOC_STACK,writeAsciiToMemory,intArrayFromString,UTF8ToString,StringToUTF8]
+JS_EXPORTED_RUNTIME_METHODS := [ALLOC_STACK,writeAsciiToMemory,intArrayFromString]
 JS_EXTERNS := javascript/externs.js
 
 PUBLIC_HEADERS := include/olm/olm.h include/olm/outbound_group_session.h include/olm/inbound_group_session.h include/olm/pk.h include/olm/sas.h include/olm/error.h include/olm/olm_export.h
@@ -93,7 +93,7 @@ LDFLAGS += -Wall -Werror
 CFLAGS_NATIVE = -fPIC
 CXXFLAGS_NATIVE = -fPIC
 
-EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 -s MODULARIZE=1
+EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 -s MODULARIZE=1 -Wno-error=closure
 
 # Olm generally doesn't need a lot of memory to encrypt / decrypt its usual
 # payloads (ie. Matrix messages), but we do need about 128K of heap to encrypt
@@ -105,7 +105,7 @@ EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 
 # we don't use this for the legacy build.)
 EMCCFLAGS_WASM += -s TOTAL_STACK=65536 -s TOTAL_MEMORY=262144 -s ALLOW_MEMORY_GROWTH
 
-EMCCFLAGS_ASMJS += -s WASM=0 -Wno-error=closure
+EMCCFLAGS_ASMJS += -s WASM=0
 
 EMCC.c = $(EMCC) $(CFLAGS) $(CPPFLAGS) -c -DNDEBUG -DOLM_STATIC_DEFINE=1
 EMCC.cc = $(EMCC) $(CXXFLAGS) $(CPPFLAGS) -c -DNDEBUG -DOLM_STATIC_DEFINE=1
