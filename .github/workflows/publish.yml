@@ -1,0 +1,34 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+# Publish using the reusable workflow from dart-lang.
+# Slightly modified to run our prep script first.
+jobs:
+  publish:
+    name: "Publish to pub.dev"
+    environment: pub.dev
+    permissions:
+      id-token: write # This is required for requesting the JWT
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v3
+      # Setup Dart SDK with JWT token
+      - uses: dart-lang/setup-dart@7b1734b5b08d53fbf347cf96b664fa1a49cc6497
+      - name: Prepare publish
+        run: ./package_flutter.sh
+      # Minimal package setup and dry run checks.
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: publishing/flutter
+      - name: Publish - dry run
+        run: dart pub publish --dry-run
+        working-directory: publishing/flutter
+      # Publishing...
+      - name: Publish to pub.dev
+        run: dart pub publish -f
+        working-directory: publishing/flutter
