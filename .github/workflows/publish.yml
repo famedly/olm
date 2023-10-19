@@ -12,6 +12,7 @@ jobs:
     name: "Publish to pub.dev"
     environment: pub.dev
     permissions:
+      contents: read
       id-token: write # This is required for requesting the JWT
     runs-on: ubuntu-latest
     steps:
@@ -20,6 +21,7 @@ jobs:
       # Setup Dart SDK with JWT token
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
+          flutter-version: '3.13.8'
           channel: stable
           cache: true
       - name: Prepare publish
@@ -28,10 +30,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         working-directory: publishing/flutter
-      - name: Publish - dry run
-        run: flutter pub publish --dry-run
+      # has the oidc bits
+      - uses: dart-lang/setup-dart@a57a6c04cf7d4840e88432aad6281d1e125f0d46 
+      - name: Dry run 
+        run: dart pub publish --dry-run
         working-directory: publishing/flutter
       # Publishing...
       - name: Publish to pub.dev
-        run: flutter pub publish -f
+        run: dart pub publish -f
         working-directory: publishing/flutter
