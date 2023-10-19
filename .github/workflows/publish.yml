@@ -18,17 +18,20 @@ jobs:
       # Checkout repository
       - uses: actions/checkout@v3
       # Setup Dart SDK with JWT token
-      - uses: dart-lang/setup-dart@7b1734b5b08d53fbf347cf96b664fa1a49cc6497
+      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+        with:
+          channel: stable
+          cache: true
       - name: Prepare publish
         run: ./package_flutter.sh
       # Minimal package setup and dry run checks.
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
         working-directory: publishing/flutter
       - name: Publish - dry run
-        run: dart pub publish --dry-run
+        run: flutter pub publish --dry-run
         working-directory: publishing/flutter
       # Publishing...
       - name: Publish to pub.dev
-        run: dart pub publish -f
+        run: flutter pub publish -f
         working-directory: publishing/flutter

@@ -8,11 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@7b1734b5b08d53fbf347cf96b664fa1a49cc6497
+      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+        with:
+          channel: stable
+          cache: true
       - name: Prepare publish
         run: ./package_flutter.sh
       - name: pub.dev publish dry run
         working-directory: publishing/flutter
         run: |
-          dart pub get
-          dart pub publish --dry-run
+          flutter pub get
+          flutter pub publish --dry-run
