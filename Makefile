@@ -5,10 +5,9 @@ VERSION := $(MAJOR).$(MINOR).$(PATCH)
 PREFIX ?= /usr/local
 BUILD_DIR := build
 RELEASE_OPTIMIZE_FLAGS ?= -O3
-DEBUG_OPTIMIZE_FLAGS ?= -g -O0
+DEBUG_OPTIMIZE_FLAGS ?= -g -O0 -U_FORTIFY_SOURCE
 JS_OPTIMIZE_FLAGS ?= -O3
 FUZZER_OPTIMIZE_FLAGS ?= -O3
-CC = gcc
 EMCC = emcc
 EMAR = emar
 AR = ar
@@ -31,7 +30,7 @@ JS_ASMJS_TARGET := javascript/olm_legacy.js
 WASM_TARGET := $(BUILD_DIR)/wasm/libolm.a
 
 JS_EXPORTED_FUNCTIONS := javascript/exported_functions.json
-JS_EXPORTED_RUNTIME_METHODS := [ALLOC_STACK]
+JS_EXPORTED_RUNTIME_METHODS := [ALLOC_STACK,writeAsciiToMemory,intArrayFromString,UTF8ToString,stringToUTF8]
 JS_EXTERNS := javascript/externs.js
 
 PUBLIC_HEADERS := include/olm/olm.h include/olm/outbound_group_session.h include/olm/inbound_group_session.h include/olm/pk.h include/olm/sas.h include/olm/error.h include/olm/olm_export.h
@@ -94,7 +93,7 @@ LDFLAGS += -Wall -Werror
 CFLAGS_NATIVE = -fPIC
 CXXFLAGS_NATIVE = -fPIC
 
-EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 -s MODULARIZE=1
+EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 -s MODULARIZE=1 -Wno-error=closure
 
 # Olm generally doesn't need a lot of memory to encrypt / decrypt its usual
 # payloads (ie. Matrix messages), but we do need about 128K of heap to encrypt
@@ -104,7 +103,7 @@ EMCCFLAGS = --closure 1 --memory-init-file 0 -s NO_FILESYSTEM=1 -s INVOKE_RUN=0 
 # (This can't be changed by the app with wasm since it's baked into the wasm).
 # (emscripten also mandates at least 16MB of memory for asm.js now, so
 # we don't use this for the legacy build.)
-EMCCFLAGS_WASM += -s TOTAL_STACK=65536 -s TOTAL_MEMORY=262144 -s ALLOW_MEMORY_GROWTH=1
+EMCCFLAGS_WASM += -s TOTAL_STACK=65536 -s TOTAL_MEMORY=262144 -s ALLOW_MEMORY_GROWTH
 
 EMCCFLAGS_ASMJS += -s WASM=0 -s ALLOW_MEMORY_GROWTH=1
 
@@ -400,6 +399,9 @@ $(BUILD_DIR)/fuzzers/fuzz_%_msan: fuzzing/fuzzers/fuzz_%.cpp $(FUZZER_MSAN_OBJEC
 
 %.html: %.rst
 	rst2html $< $@
+
+%.html: %.md
+	pandoc --from markdown --to html5 --standalone --lua-filter gitlab-math.lua --katex -o $@ $<
 
 ### dependencies
 

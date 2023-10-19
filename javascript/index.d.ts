@@ -18,28 +18,28 @@ export as namespace Olm;
 
 declare class Account {
     constructor();
-    free();
-    create();
+    free(): void;
+    create(): void;
     identity_keys(): string;
     sign(message: string | Uint8Array): string;
     one_time_keys(): string;
-    mark_keys_as_published();
+    mark_keys_as_published(): void;
     max_number_of_one_time_keys(): number;
-    generate_one_time_keys(number_of_keys: number);
-    remove_one_time_keys(session: Session);
-    generate_fallback_key();
+    generate_one_time_keys(number_of_keys: number): void;
+    remove_one_time_keys(session: Session): void;
+    generate_fallback_key(): void;
     fallback_key(): string;
     unpublished_fallback_key(): string;
     forget_old_fallback_key(): void;
     pickle(key: string | Uint8Array): string;
-    unpickle(key: string | Uint8Array, pickle: string);
+    unpickle(key: string | Uint8Array, pickle: string): void;
 }
 
 declare class Session {
     constructor();
     free(): void;
     pickle(key: string | Uint8Array): string;
-    unpickle(key: string | Uint8Array, pickle: string);
+    unpickle(key: string | Uint8Array, pickle: string): void;
     create_outbound(
         account: Account, their_identity_key: string, their_one_time_key: string,
     ): void;
@@ -51,7 +51,10 @@ declare class Session {
     has_received_message(): boolean;
     matches_inbound(one_time_key_message: string): boolean;
     matches_inbound_from(identity_key: string, one_time_key_message: string): boolean;
-    encrypt(plaintext: string): object;
+    encrypt(plaintext: string): {
+        type: 0 | 1; // 0: PreKey, 1: Message
+        body: string;
+    };
     decrypt(message_type: number, message: string): string;
     describe(): string;
 }
@@ -67,10 +70,13 @@ declare class InboundGroupSession {
     constructor();
     free(): void;
     pickle(key: string | Uint8Array): string;
-    unpickle(key: string | Uint8Array, pickle: string);
+    unpickle(key: string | Uint8Array, pickle: string): void;
     create(session_key: string): string;
     import_session(session_key: string): string;
-    decrypt(message: string): object;
+    decrypt(message: string): {
+        message_index: number;
+        plaintext: string;
+    };
     session_id(): string;
     first_known_index(): number;
     export_session(message_index: number): string;
@@ -80,7 +86,7 @@ declare class OutboundGroupSession {
     constructor();
     free(): void;
     pickle(key: string | Uint8Array): string;
-    unpickle(key: string | Uint8Array, pickle: string);
+    unpickle(key: string | Uint8Array, pickle: string): void;
     create(): void;
     encrypt(plaintext: string): string;
     session_id(): string;
@@ -92,7 +98,11 @@ declare class PkEncryption {
     constructor();
     free(): void;
     set_recipient_key(key: string): void;
-    encrypt(plaintext: string): object;
+    encrypt(plaintext: string): {
+        ciphertext: string;
+        mac: string;
+        ephemeral: string;
+    };
 }
 
 declare class PkDecryption {
@@ -121,6 +131,7 @@ declare class SAS {
     set_their_key(their_key: string): void;
     generate_bytes(info: string, length: number): Uint8Array;
     calculate_mac(input: string, info: string): string;
+    calculate_mac_fixed_base64(input: string, info: string): string;
     calculate_mac_long_kdf(input: string, info: string): string;
 }
 

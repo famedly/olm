@@ -24,8 +24,10 @@ setup(
     cffi_modules=["olm_build.py:ffibuilder"],
     install_requires=[
         "cffi>=1.0.0",
-        "future",
         "typing;python_version<'3.5'"
     ],
-    zip_safe=False
+    zip_safe=False,
+    package_data={
+        "olm": ["py.typed"]
+    }
 )

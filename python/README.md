@@ -15,6 +15,18 @@ found [here][6].
 
 The full API reference can be found [here][7].
 
+# Installation instructions
+
+To install from the source package, you will need:
+
+- cmake (recommended) or GNU make
+- a C/C++ compiler
+
+You can then run `pip install python-olm`.
+
+This should work in UNIX-like environments, including macOS, and may work in
+other environments too, but is known to not work yet in Windows.
+
 # Accounts
 
 Accounts create and hold the central identity of the Olm protocol, they consist of a fingerprint and identity
@@ -157,5 +169,5 @@ Pickling works the same way as for peer-to-peer Olm sessions.
 [3]: https://cffi.readthedocs.io/en/latest/
 [4]: https://git.matrix.org/git/olm/about/docs/olm.rst
 [5]: https://git.matrix.org/git/olm/about/docs/megolm.rst
-[6]: https://matrix.org/docs/guides/e2e_implementation.html
+[6]: https://matrix.org/docs/guides/end-to-end-encryption-implementation-guide
 [7]: https://poljar.github.io/python-olm/html/index.html

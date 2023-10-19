@@ -223,6 +223,23 @@ public class OlmSession extends CommonSerializeUtils implements Serializable {
      */
     private native byte[] getSessionIdentifierJni();
 
+    public String sessionDescribe() throws OlmException {
+        try {
+            byte[] buffer = olmSessionDescribeJni();
+
+            if (null != buffer) {
+                return new String(buffer, "UTF-8");
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sessionDescribe(): " + e.getMessage());
+            throw new OlmException(OlmException.EXCEPTION_CODE_SESSION_SESSION_DESCRIBE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    private native byte[] olmSessionDescribeJni();
+
     /**
      * Checks if the PRE_KEY({@link OlmMessage#MESSAGE_TYPE_PRE_KEY}) message is for this in-bound session.<br>
      * This API may be used to process a "m.room.encrypted" event when type = 1 (PRE_KEY).
@@ -448,5 +465,30 @@ public class OlmSession extends CommonSerializeUtils implements Serializable {
      * @return the deserialized session
      **/
     private native long deserializeJni(byte[] aSerializedData, byte[] aKey);
+
+    /**
+     * Return a pickled session as a bytes buffer.<br>
+     * The session is serialized and encrypted with aKey.
+     * In case of failure, an error human readable
+     * description is provide in aErrorMsg.
+     * @param aKey encryption key
+     * @param aErrorMsg error message description
+     * @return the pickled session as bytes buffer
+     */
+    public byte[] pickle(byte[] aKey, StringBuffer aErrorMsg) {
+        return serialize(aKey, aErrorMsg);
+    }
+
+    /**
+     * Loads a session from a pickled bytes buffer.<br>
+     * See {@link #serialize(byte[], StringBuffer)}
+     * @param aSerializedData bytes buffer
+     * @param aKey key used to encrypted
+     * @exception Exception the exception
+     */
+    public void unpickle(byte[] aSerializedData, byte[] aKey) throws Exception {
+        deserialize(aSerializedData, aKey);
+    }
+
 }
 

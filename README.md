@@ -9,6 +9,69 @@ The specification of the Olm ratchet can be found in [docs/olm.md](docs/olm.md).
 This library also includes an implementation of the Megolm cryptographic
 ratchet, as specified in [docs/megolm.md](docs/megolm.md).
 
+## Installing
+
+### Linux and other Unix-like systems
+
+Your distribution may have pre-compiled packages available.  If not, or if you
+need a newer version, you will need to compile from source.  See the "Building"
+section below for more details.
+
+### macOS
+
+The easiest way to install on macOS is via Homebrew.  If you do not have
+Homebrew installed, follow the instructions at https://brew.sh/ to install it.
+
+You can then install libolm by running
+
+```bash
+brew install libolm
+```
+
+If you also need the Python packages, you can run
+
+```bash
+pip3 install python-olm --global-option="build_ext" --global-option="--include-dirs="`brew --prefix libolm`"/include" --global-option="--library-dirs="`brew --prefix libolm`"/lib"
+```
+
+Note that this will install an older version of the Python bindings, which may
+be missing some functions.  If you need the latest version, you will need to
+build from source.
+
+### Windows
+
+You will need to build from source.  See the "Building" section below for more
+details.
+
+### Bindings
+
+#### JavaScript
+
+You can use pre-built npm packages, available at
+<https://gitlab.matrix.org/matrix-org/olm/-/packages?type=npm>.
+
+#### Python
+
+A Python source package and pre-built packages for certain architectures from
+<https://pypi.org/project/python-olm/>.  If a pre-built package is not
+available for your architecture, you will need:
+
+- cmake (recommended) or GNU make
+- a C/C++ compiler
+
+to build the source package.
+
+You can then run `pip install python-olm`.
+
+Currently, we try to provide packages for all supported versions of Python on
+x86-64, i686, and aarch64, but we cannot guarantee that packages for all
+versions will be available on all architectures.
+
+#### Android
+
+Pre-built Android bindings are available at
+<https://gitlab.matrix.org/matrix-org/olm/-/packages?type=Maven>.
+
 ## Building
 
 To build olm as a shared library run:
@@ -41,21 +104,37 @@ target_link_libraries(my_exe Olm::Olm)
 
 ### Bindings
 
-To build the JavaScript bindings, install emscripten from https://emscripten.org/ and then run:
+#### JavaScript
+
+The recommended way to build the JavaScript bindings is using
+[Nix](https://nixos.org/).  With Nix, you can run
+
+```bash
+nix build .\#javascript
+```
+
+to build the bindings.
+
+If you do not have Nix you can, install emscripten from https://emscripten.org/
+and then run:
 
 ```bash
 make js
 ```
 
-Note that if you run emscripten in a docker container, you need to pass through
+Emscripten can also be run via Docker, in which case, you need to pass through
 the EMCC_CLOSURE_ARGS environment variable.
+
+#### Android
 
 To build the android project for Android bindings, run:
 
 ```bash
 cd android
-./gradlew clean assembleRelease
+./gradlew clean build
 ```
+
+#### Objective-C
 
 To build the Xcode workspace for Objective-C bindings, run:
 
@@ -65,16 +144,15 @@ pod install
 open OLMKit.xcworkspace
 ```
 
-To build the Python bindings, first build olm as a shared library as above, and
+#### Python
+
+To build the Python 3 bindings, first build olm as a library as above, and
 then run:
 
 ```bash
 cd python
 make
 ```
-
-to make both the Python 2 and Python 3 bindings.  To make only one version, use
-``make olm-python2`` or ``make olm-python3`` instead of just ``make``.
 
 ### Using make instead of cmake
 
@@ -119,6 +197,8 @@ repository, some bindings are (in alphabetical order):
 - [nim-olm](https://codeberg.org/BarrOff/nim-olm) (MIT) Nim bindings
 - [olm-sys](https://gitlab.gnome.org/BrainBlasted/olm-sys) (Apache-2.0) Rust
   bindings
+- [Trixnity](https://gitlab.com/trixnity/trixnity) (Apache-2.0) Kotlin SDK for
+  Matrix, including Olm bindings
 
 Note that bindings may have a different license from libolm, and are *not*
 endorsed by the Matrix.org Foundation C.I.C.
@@ -126,8 +206,9 @@ endorsed by the Matrix.org Foundation C.I.C.
 ## Release process
 
 First: bump version numbers in ``common.mk``, ``CMakeLists.txt``,
-``javascript/package.json``, ``python/olm/__version__.py``, ``OLMKit.podspec``,
-``Package.swift``, and ``android/gradle.properties``.
+``javascript/package.json``, ``python/olm/__version__.py``,
+``python/pyproject.toml``, ``OLMKit.podspec``, ``Package.swift``, and
+``android/gradle.properties``.
 
 Also, ensure the changelog is up to date, and that everything is committed to
 git.
@@ -168,13 +249,13 @@ documentation contains instructions on how to set up twine (Python) and npm
 (JavaScript) to upload to the registry.
 
 To publish the Android library to MavenCentral (you will need some secrets), in the /android folder:
- - Run the command `./gradlew clean publish --no-daemon --no-parallel --stacktrace`.
+ - Run the command `./gradlew clean build publish --no-daemon --no-parallel --stacktrace`. The generated AAR must be approx 500 kb.
  - Connect to https://s01.oss.sonatype.org
  - Click on Staging Repositories and check the the files have been uploaded
  - Click on close
  - Wait (check Activity tab until step "Repository closed" is displayed)
  - Click on release. The staging repository will disappear
- - Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/olm/ (it can take a few minutes)
+ - Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/olm-sdk/ (it can take a few minutes)
 
 ## Design
 

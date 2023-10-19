@@ -1,3 +1,65 @@
+Changes in `3.2.15 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.15>`_
+===========================================================================
+
+This release includes the following changes since 3.2.15:
+
+* Improvements to Python packaging
+  * No longer depend on ``future`` since Python 2 is no longer supported.
+  * Improve compatibility with tox 4.
+  * Add support for making standalone sdist.
+* Improvements to Nix flake (Thanks to Jon Ringer)
+  * Improve structure.
+  * Enable Darwin builds.
+
+Changes in `3.2.14 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.14>`_
+===========================================================================
+
+This release includes the following changes since 3.2.13:
+
+* TypeScript type improvements.
+* Improvements to Python packaging
+* Documentation improvements.
+
+Changes in `3.2.13 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.13>`_
+===========================================================================
+
+This release includes the following changes since 3.2.12:
+
+* Fix compilation with newer versions of emscripten.
+  * The npm package is compiled with emscripten 3.1.17 to fix compatibility with
+    node 18.
+* Add py.typed to Python wheels.
+* Some documentation fixes and updates.
+* Improve the pkgconfig file.
+
+Changes in `3.2.12 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.12>`_
+===========================================================================
+
+This release includes the following changes since 3.2.11:
+
+* Expose olm_sas_calculate_mac_fixed_base64 in the bindings.
+* Allow memory to grow in wasm.  Thanks to benkuly for the suggestion.
+* Fix Python type hints.
+* Some Python build fixes.
+* Initial work on a Nix flake for building and testing.
+
+Changes in `3.2.11 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.11>`_
+===========================================================================
+
+This release includes the following changes since 3.2.10:
+
+* Fix building documentation.  Thanks to Jonas Smedegaard.  The documents
+  written in Markdown are now converted to HTML using Pandoc.
+* Add methods for getting unpublished fallback key in Objective-C binding.
+* Add public pickle/unpickle methods to Java binding.
+* Add wrapper for olm_session_describe to Java binding.  Thanks to Alex Baker.
+
+Changes in `3.2.10 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.10>`_
+===========================================================================
+
+This release includes no change since 3.2.9, but is created to be able to
+publish again the Android library on MavenCentral.
+
 Changes in `3.2.9 <https://gitlab.matrix.org/matrix-org/olm/tags/3.2.9>`_
 =========================================================================
 
@@ -107,11 +169,13 @@ Changes in `3.1.5 <https://gitlab.matrix.org/matrix-org/olm/tags/3.1.5>`_
 This release includes the following changes since 3.1.4:
 
 * Build improvements:
+
   * Fix CMake handling when installing in a non-standard location. Thanks to
     Alexey Rusakov.
   * Add support in the Makefile for creating a WASM-ready archive. Thanks to
     stoically.
   * Improve support for LLVM is Makefile. Thanks to caywin25 for reporting.
+
 * Add a TypeScript definition file.
 * Some documentation and example fixes.
 * Add list of bindings to the README.
