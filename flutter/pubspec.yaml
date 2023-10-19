@@ -1,7 +1,7 @@
 publish_to: none # run ../package_flutter.sh and then publish ../build/flutter
 name: flutter_olm
 description: builds the olm library for android and ios to be used with dart:ffi
-version: 1.2.0
+version: 1.3.0
 repository: https://gitlab.com/famedly/company/frontend/libraries/olm
 
 environment:
