@@ -1,3 +1,7 @@
+## 1.3.1
+
+- fix a build issue which broke the iOS version of 1.3.0.
+
 ## 1.3.0
 
 - update olm to 3.2.15
