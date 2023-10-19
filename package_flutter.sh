@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 rm -rf publishing/flutter
 mkdir -p publishing
 cp -rL flutter publishing/flutter
