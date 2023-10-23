@@ -1,3 +1,7 @@
+## 1.3.2
+
+- chore: create release on tag and upload olm there (td)
+
 ## 1.3.1
 
 - fix a build issue which broke the iOS version of 1.3.0.
