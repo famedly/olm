@@ -9,7 +9,7 @@ on:
 # Slightly modified to run our prep script first.
 jobs:
   publish:
-    name: "Publish to pub.dev"
+    name: Publish to pub.dev
     environment: pub.dev
     permissions:
       contents: read
@@ -39,3 +39,34 @@ jobs:
       - name: Publish to pub.dev
         run: dart pub publish -f
         working-directory: publishing/flutter
+  
+  build_js:
+    environment: pub.dev
+    runs-on: ubuntu-latest
+    container: docker.io/emscripten/emsdk:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build JS and WASM
+        run: |
+          make js
+          zip olm.zip javascript/olm.js javascript/olm.wasm javascript/olm_legacy.js
+      - uses: actions/upload-artifact@v3
+        with:
+          name: olm.zip
+          path: olm.zip
+
+  create_release:
+    needs: [build_js]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: olm.zip
+          path: .
+      - name: Create release
+        run: |
+          gh release create ${{ github.ref_name }}
+          gh release upload ${{ github.ref_name }} olm.zip --clobber

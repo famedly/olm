@@ -22,3 +22,4 @@ jobs:
   app_jobs:
     secrets: inherit
     uses: ./.github/workflows/app.yml
+
