@@ -58,7 +58,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            path "../ios/CMakeLists.txt"
+            path "../../CMakeLists.txt"
         }
     }
 
