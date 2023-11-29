@@ -1,3 +1,7 @@
+## 1.4.0
+- chore: upgrade Android project to latest gradle (The one with the braid)
+- fix: use correct CMakeLists.txt file for Android (The one with the braid)
+
 ## 1.3.2
 
 - chore: create release on tag and upload olm there (td)
