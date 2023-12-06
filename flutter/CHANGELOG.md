@@ -1,4 +1,12 @@
+## 1.4.1
+
+Reverts the CMakeList.txt change in 1.4.0. This change was done to fix the git
+build on Windows without symlink support enabled. It however broke the android
+release build everywhere. As such the change is reverted and a proper fix (for
+integrating the git package directly) will come in the future.
+
 ## 1.4.0
+
 - chore: upgrade Android project to latest gradle (The one with the braid)
 - fix: use correct CMakeLists.txt file for Android (The one with the braid)
 
