@@ -1,3 +1,6 @@
+## 1.4.2
+- chore: upgrade gradle to 8.4.1 (Mohammad Reza Moradi)
+
 ## 1.4.1
 
 Reverts the CMakeList.txt change in 1.4.0. This change was done to fix the git
