@@ -481,14 +481,14 @@ Session.prototype['decrypt'] = restore_stack(function(
 
     try {
         message_buffer = malloc(message.length);
-        writeAsciiToMemory(message, message_buffer, true);
+        stringToAscii(message, message_buffer);
 
         max_plaintext_length = session_method(
             Module['_olm_decrypt_max_plaintext_length']
         )(this.ptr, message_type, message_buffer, message.length);
 
         // caculating the length destroys the input buffer, so we need to re-copy it.
-        writeAsciiToMemory(message, message_buffer, true);
+        stringToAscii(message, message_buffer);
 
         plaintext_buffer = malloc(max_plaintext_length + NULL_BYTE_PADDING_LENGTH);
 
