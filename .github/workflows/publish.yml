@@ -8,6 +8,7 @@ on:
 # Publish using the reusable workflow from dart-lang.
 # Slightly modified to run our prep script first.
 jobs:
+  
   build_js:
     environment: pub.dev
     runs-on: ubuntu-latest
@@ -22,6 +23,7 @@ jobs:
         with:
           name: olm.zip
           path: olm.zip
+
   publish:
     needs: [build_js]
     name: Publish to pub.dev
