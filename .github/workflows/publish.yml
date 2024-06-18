@@ -10,7 +10,6 @@ on:
 jobs:
   
   build_js:
-    environment: pub.dev
     runs-on: ubuntu-latest
     container: docker.io/emscripten/emsdk:latest
     steps:
