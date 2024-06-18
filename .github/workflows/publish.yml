@@ -8,7 +8,24 @@ on:
 # Publish using the reusable workflow from dart-lang.
 # Slightly modified to run our prep script first.
 jobs:
+  
+  build_js:
+    environment: pub.dev
+    runs-on: ubuntu-latest
+    container: docker.io/emscripten/emsdk:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build JS and WASM
+        run: |
+          make js
+          zip olm.zip javascript/olm.js javascript/olm.wasm javascript/olm_legacy.js
+      - uses: actions/upload-artifact@v3
+        with:
+          name: olm.zip
+          path: olm.zip
+
   publish:
+    needs: [build_js]
     name: Publish to pub.dev
     environment: pub.dev
     permissions:
@@ -39,21 +56,6 @@ jobs:
       - name: Publish to pub.dev
         run: dart pub publish -f
         working-directory: publishing/flutter
-  
-  build_js:
-    environment: pub.dev
-    runs-on: ubuntu-latest
-    container: docker.io/emscripten/emsdk:latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build JS and WASM
-        run: |
-          make js
-          zip olm.zip javascript/olm.js javascript/olm.wasm javascript/olm_legacy.js
-      - uses: actions/upload-artifact@v3
-        with:
-          name: olm.zip
-          path: olm.zip
 
   create_release:
     needs: [build_js]
