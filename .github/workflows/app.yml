@@ -21,3 +21,17 @@ jobs:
         run: |
           flutter pub get
           flutter pub publish --dry-run
+  
+  build_js:
+    runs-on: ubuntu-latest
+    container: docker.io/emscripten/emsdk:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build JS and WASM
+        run: |
+          make js
+          zip olm.zip javascript/olm.js javascript/olm.wasm javascript/olm_legacy.js
+      - uses: actions/upload-artifact@v3
+        with:
+          name: olm.zip
+          path: olm.zip
