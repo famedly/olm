@@ -1,3 +1,10 @@
+## 2.0.0
+
+- chore: publish on dev dependant on successfull buld js (Mohammad Reza Moradi)
+- chore: upgrade gradle to 8.4.1 (Mohammad Reza Moradi)
+- fix: deprecate writeAsciiToMemory (Mohammad Reza Moradi)
+- fix: js build (Mohammad Reza Moradi)
+
 ## 1.4.1
 
 Reverts the CMakeList.txt change in 1.4.0. This change was done to fix the git
