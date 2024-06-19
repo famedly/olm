@@ -7,7 +7,7 @@ jobs:
   pub-dev-dry-run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           channel: stable
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/emscripten/emsdk:latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build JS and WASM
         run: |
           make js
