@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/emscripten/emsdk:latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build JS and WASM
         run: |
           make js
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # Setup Dart SDK with JWT token
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
@@ -62,7 +62,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
         with:
           name: olm.zip
