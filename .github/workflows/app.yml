@@ -31,7 +31,7 @@ jobs:
         run: |
           make js
           zip olm.zip javascript/olm.js javascript/olm.wasm javascript/olm_legacy.js
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: olm.zip
           path: olm.zip
